@@ -27,6 +27,14 @@
     <ClInclude Include="AdriSunRPGHelperPch.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="CRTPUncopyable.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="CRTPHierarchy.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="CRTPNonInstanciable.h">
+      <Filter>Fichiers d%27en-tête</Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdriSunRPGHelperPch.cpp">
