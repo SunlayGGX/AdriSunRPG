@@ -1,0 +1,11 @@
+*.vcxproj.user
+*.exe
+
+*.ipch
+
+*.obj
+
+**/Debug/**
+**/Release/**
+**/.vs/**
+
