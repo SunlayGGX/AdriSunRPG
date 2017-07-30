@@ -8,6 +8,7 @@
 
 #include "UtilsMacro.h"
 
+
 #define WIN32_LEAN_AND_MEAN
 #   include <windows.h>
 #undef WIN32_LEAN_AND_MEAN
@@ -23,6 +24,8 @@
 #include <limits>
 #include <type_traits>
 #include <algorithm>
+#include <assert.h>
+#include <stdexcept>
 
 
 
