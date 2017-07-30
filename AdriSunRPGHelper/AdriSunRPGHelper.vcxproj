@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdriSunRPGHelperPch.h" />
+    <ClInclude Include="AdriSunSingleton.h" />
     <ClInclude Include="CRTPHierarchy.h" />
     <ClInclude Include="CRTPNonInstanciable.h" />
     <ClInclude Include="CRTPUncopyable.h" />
