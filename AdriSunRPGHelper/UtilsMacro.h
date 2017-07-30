@@ -6,7 +6,7 @@
 #define STRINGIFY(x) #x
 
 
-#define ADRISUN_DECLARE_SLG_SINGLETON_ALLOCATOR_HELPER_FOR(Type) template<class Type> class AdriSunSingletonAllocatorHelper;
+#define ADRISUN_DECLARE_SLG_SINGLETON_ALLOCATOR_HELPER template<class Type> class AdriSunSingletonAllocatorHelper;
 
 /*
 Macro for generating :
