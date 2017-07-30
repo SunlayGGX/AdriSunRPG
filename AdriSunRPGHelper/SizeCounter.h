@@ -11,7 +11,7 @@ namespace AdriSunRPG
     public:
         enum
         {
-            value = sizeof(FirstType) + SizeCounter<OtherType...>::value;
+            value = sizeof(FirstType) + SizeCounter<OtherType...>::value
         };
     };
 
@@ -24,7 +24,7 @@ namespace AdriSunRPG
     public:
         enum
         {
-            value = sizeof(LonelyType);
+            value = sizeof(LonelyType)
         };
     };
 }
