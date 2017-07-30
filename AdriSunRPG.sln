@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AdriSunRPG", "AdriSunRPG\AdriSunRPG.vcxproj", "{40D26E60-E0EB-4F3F-8988-9BD651CEF6D6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F77A12E6-EC61-4A8F-A7B8-744C29DD0B30} = {F77A12E6-EC61-4A8F-A7B8-744C29DD0B30}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AdriSunRPGHelper", "AdriSunRPGHelper\AdriSunRPGHelper.vcxproj", "{F77A12E6-EC61-4A8F-A7B8-744C29DD0B30}"
 EndProject
