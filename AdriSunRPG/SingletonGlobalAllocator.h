@@ -17,7 +17,7 @@ namespace AdriSunRPG
     public:
         static void allocate(char* &where)
         {
-            SingletonType::s_instance = new(static_cast<void*>(where)) SlgSingleton;
+            SingletonType::s_instance = new(static_cast<void*>(where)) SingletonType;
             where += sizeof(SingletonType);
         }
 
