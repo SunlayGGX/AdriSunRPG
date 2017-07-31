@@ -50,5 +50,17 @@
     <ClCompile Include="AutoEngineInstaller.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+  <ItemGroup>
+    <ResourceCompile Include="AdriSunRPG.rc">
+      <Filter>Fichiers de ressources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="iconAdriSunRPG.ico">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="iconSmall.ico">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
   </ItemGroup>
 </Project>
