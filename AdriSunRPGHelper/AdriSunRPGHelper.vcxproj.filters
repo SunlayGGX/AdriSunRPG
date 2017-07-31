@@ -39,6 +39,9 @@
     <ClInclude Include="CRTPNonInstanciable.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="GameConfig.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdriSunRPGHelperPch.cpp">
