@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="AdriSunRPGPch.h" />
     <ClInclude Include="AutoEngineInstaller.h" />
+    <ClInclude Include="DirectXGlobalDevice.h" />
     <ClInclude Include="DirectXHardwareInformer.h" />
     <ClInclude Include="GlobalEngine.h" />
     <ClInclude Include="resource.h" />
@@ -168,6 +169,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AdriSunRPGPch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="AutoEngineInstaller.cpp" />
+    <ClCompile Include="DirectXGlobalDevice.cpp" />
     <ClCompile Include="DirectXHardwareInformer.cpp" />
     <ClCompile Include="GlobalEngine.cpp" />
     <ClCompile Include="SingletonGlobalAllocator.cpp" />
