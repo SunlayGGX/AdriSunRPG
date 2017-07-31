@@ -12,8 +12,10 @@ namespace AdriSunRPG
 
 
     public:
+        std::atomic<bool> m_run;
         virtual void initialize() override;
         virtual void destroy() override;
+        void quit();
     };
 }
 
