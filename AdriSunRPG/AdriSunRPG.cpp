@@ -3,10 +3,14 @@
 
 #include "AutoEngineInstaller.h"
 
+#include "GlobalEngine.h"
+
 
 int main() try
 {
     AdriSunRPG::AutoEngineInstaller installEngine;
+
+    AdriSunRPG::GlobalEngine::instance().run();
 
     return 0;
 }
