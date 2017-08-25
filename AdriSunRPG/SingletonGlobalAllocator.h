@@ -2,6 +2,16 @@
 
 #include "SizeCounter.h"
 
+#define ADRISUN_ALLOCATE_SINGLETON_ON_CACHE_ALIGNMENT
+
+
+#ifdef ADRISUN_ALLOCATE_SINGLETON_ON_CACHE_ALIGNMENT
+#   define ADRISUN_ALIGN_SINGLETON_GLOBAL_ALLOCATOR alignas(SYSTEM_CACHE_ALIGNMENT_SIZE)
+#   define ADRISUN_RETRIEVE_ALLOCATED_SIZE_OF(Singletons) SizeCounter<Singletons>::cache_optimized_value
+#else
+#   define ADRISUN_ALIGN_SINGLETON_GLOBAL_ALLOCATOR 
+#   define ADRISUN_RETRIEVE_ALLOCATED_SIZE_OF(Singletons) SizeCounter<Singletons>::value
+#endif
 
 namespace AdriSunRPG
 {
@@ -18,7 +28,7 @@ namespace AdriSunRPG
         static void allocate(char* &where)
         {
             SingletonType::s_instance = new(static_cast<void*>(where)) SingletonType;
-            where += sizeof(SingletonType);
+            where += ADRISUN_RETRIEVE_ALLOCATED_SIZE_OF(SingletonType);
         }
 
         static void deallocate()
@@ -29,16 +39,33 @@ namespace AdriSunRPG
 
 
     template<class ... Args>
-    class alignas(SYSTEM_CACHE_ALIGNMENT_SIZE) AdriSunSingletonGlobalAllocator
+    class ADRISUN_ALIGN_SINGLETON_GLOBAL_ALLOCATOR AdriSunSingletonGlobalAllocator
     {
     public:
         enum
         {
-            MEMORY_SIZE_IN_BYTES = AdriSunRPG::SizeCounter<Args...>::value
+            MEMORY_SIZE_IN_BYTES = ADRISUN_RETRIEVE_ALLOCATED_SIZE_OF(Args...)
         };
 
-        static_assert(sizeof...(Args) > 0, ADRISUN_NORMALIZE_STATIC_ASSERT_MESSAGE_OUTSIDE_FUNCTION("The argument count must be superior or equal to 1"));
-        static_assert(AdriSunRPG::AdriSunSingletonGlobalAllocator<Args...>::MEMORY_SIZE_IN_BYTES > 0, ADRISUN_NORMALIZE_STATIC_ASSERT_MESSAGE_OUTSIDE_FUNCTION("The memory size allocated must be superior to 0"));
+
+    public:
+        static_assert(
+            sizeof...(Args) > 0, 
+            ADRISUN_NORMALIZE_STATIC_ASSERT_MESSAGE_OUTSIDE_FUNCTION("The argument count must be superior or equal to 1")
+            );
+
+        static_assert(
+            AdriSunRPG::AdriSunSingletonGlobalAllocator<Args...>::MEMORY_SIZE_IN_BYTES > 0, 
+            ADRISUN_NORMALIZE_STATIC_ASSERT_MESSAGE_OUTSIDE_FUNCTION("The memory size allocated must be superior to 0")
+            );
+
+#ifdef ADRISUN_ALLOCATE_SINGLETON_ON_CACHE_ALIGNMENT
+        static_assert(
+            ((AdriSunRPG::AdriSunSingletonGlobalAllocator<Args...>::MEMORY_SIZE_IN_BYTES % SYSTEM_CACHE_ALIGNMENT_SIZE) == 0) &&
+            (SizeCounter<Args...>::value <= AdriSunSingletonGlobalAllocator<Args...>::MEMORY_SIZE_IN_BYTES),
+            ADRISUN_NORMALIZE_STATIC_ASSERT_MESSAGE_OUTSIDE_FUNCTION("Error in cach optimized algorithm. Comment the macro ADRISUN_ALLOCATE_SINGLETON_ON_CACHE_ALIGNMENT and give a feed back at sunlay.g@free.fr. Tell me that you found a case where it doesn't work. Thanks a lot ^^")
+            );
+#endif
 
 
     private:
@@ -84,6 +111,8 @@ namespace AdriSunRPG
         {
             char* begin = m_bufferMemory;
             AdriSunSingletonGlobalAllocatorImpl<Args...>::allocate(begin);
+
+            assert(begin == (m_bufferMemory + AdriSunRPG::AdriSunSingletonGlobalAllocator<Args...>::MEMORY_SIZE_IN_BYTES));
         }
 
         ~AdriSunSingletonGlobalAllocator()
