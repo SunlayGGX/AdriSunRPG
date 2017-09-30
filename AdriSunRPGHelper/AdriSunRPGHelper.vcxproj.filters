@@ -18,36 +18,30 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="SizeCounter.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="AdriSunRPGPch.h">
+    <ClInclude Include="UtilsMacro.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="SingletonGlobalAllocator.h">
+    <ClInclude Include="AdriSunRPGHelperPch.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="GlobalEngine.h">
+    <ClInclude Include="AdriSunSingleton.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="AutoEngineInstaller.h">
+    <ClInclude Include="CRTPUncopyable.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="CRTPHierarchy.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="CRTPNonInstanciable.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AdriSunRPG.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="AdriSunRPGPch.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="SingletonGlobalAllocator.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GlobalEngine.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="AutoEngineInstaller.cpp">
+    <ClCompile Include="AdriSunRPGHelperPch.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
