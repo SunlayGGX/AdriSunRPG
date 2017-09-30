@@ -152,9 +152,14 @@
   <ItemGroup>
     <ClInclude Include="AdriSunRPGPch.h" />
     <ClInclude Include="AutoEngineInstaller.h" />
+    <ClInclude Include="DirectXGlobalDevice.h" />
+    <ClInclude Include="DirectXHardwareInformer.h" />
     <ClInclude Include="GlobalEngine.h" />
+    <ClInclude Include="RenderEngine.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SingletonGlobalAllocator.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdriSunRPG.cpp" />
@@ -166,8 +171,19 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AdriSunRPGPch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="AutoEngineInstaller.cpp" />
+    <ClCompile Include="DirectXGlobalDevice.cpp" />
+    <ClCompile Include="DirectXHardwareInformer.cpp" />
     <ClCompile Include="GlobalEngine.cpp" />
+    <ClCompile Include="RenderEngine.cpp" />
     <ClCompile Include="SingletonGlobalAllocator.cpp" />
+    <ClCompile Include="WindowManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AdriSunRPG.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="iconAdriSunRPG.ico" />
+    <Image Include="iconSmall.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
