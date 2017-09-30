@@ -144,7 +144,10 @@
     <ClInclude Include="CRTPHierarchy.h" />
     <ClInclude Include="CRTPNonInstanciable.h" />
     <ClInclude Include="CRTPUncopyable.h" />
+    <ClInclude Include="DirectXUtilitary.h" />
+    <ClInclude Include="GameConfig.h" />
     <ClInclude Include="SizeCounter.h" />
+    <ClInclude Include="UniqueDX.h" />
     <ClInclude Include="UtilsMacro.h" />
   </ItemGroup>
   <ItemGroup>

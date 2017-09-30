@@ -1,10 +1,18 @@
 #include "SingletonGlobalAllocator.h"
 
 #include "GlobalEngine.h"
+#include "WindowManager.h"
+#include "RenderEngine.h"
 
-using namespace AdriSunRPG;
+
+namespace AdriSunRPG
+{
+    using SingletonAllocatorAlias = AdriSunSingletonGlobalAllocator<
+        GlobalEngine,
+        WindowManager,
+        RenderEngine
+    >;
+}
 
 
-AdriSunSingletonGlobalAllocator<
-    GlobalEngine
-> g_singletonSimpleStackAllocator;
+AdriSunRPG::SingletonAllocatorAlias g_singletonSimpleStackAllocator;
