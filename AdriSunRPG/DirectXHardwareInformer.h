@@ -1,7 +1,5 @@
 #pragma once
 
-#include "UtilsMacro.h"
-
 namespace AdriSunRPG
 {
     class DirectXHardwareInformer

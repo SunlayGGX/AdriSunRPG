@@ -4,6 +4,7 @@
 
 #include "GameConfig.h"
 #include "DirectXUtilitary.h"
+#include "UniqueDX.h"
 
 using namespace AdriSunRPG;
 
@@ -172,12 +173,10 @@ void DirectXGlobalDevice::initialize(const HWND hWnd)
 
 void DirectXGlobalDevice::internalCreateRenderView()
 {
-    ID3D11Texture2D* backBuffer;
+    AdriSunRPG::UniqueDX<ID3D11Texture2D> backBuffer;
 
-    DXTry(m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&backBuffer)));
-    DXTry(m_D3DDevice->CreateRenderTargetView(backBuffer, nullptr, &m_renderTargetView));
-
-    backBuffer->Release();
+    DXTry(m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&backBuffer.get())));
+    DXTry(m_D3DDevice->CreateRenderTargetView(backBuffer.get(), nullptr, &m_renderTargetView));
 }
 
 void DirectXGlobalDevice::internalInitializeDepthBuffer()
