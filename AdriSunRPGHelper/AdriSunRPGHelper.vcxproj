@@ -72,10 +72,10 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)_d</TargetName>
-    <OutDir>$(ADRISUN_DEPEND)/AdriSunRPG/</OutDir>
+    <OutDir>$(MOONRPG_DEPEND)/MoonRPG/</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(ADRISUN_DEPEND)/AdriSunRPG/</OutDir>
+    <OutDir>$(MOONRPG_DEPEND)/MoonRPG/</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
