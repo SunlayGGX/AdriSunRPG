@@ -51,6 +51,9 @@
     <ClInclude Include="Scheduler.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="AutoSchedulerResolutionModifier.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MoonRPGHelperPch.cpp">
