@@ -9,7 +9,7 @@ namespace MoonRPG
     MOON_DECLARE_SLG_SINGLETON_ALLOCATOR_HELPER;
 
     template<class Type>
-    class MoonSingleton : virtual private MoonRPG::Uncopyable<MoonSingleton<Type>>
+    class MoonSingleton : private MoonRPG::Uncopyable<MoonSingleton<Type>>
     {
     private:
         friend Type;
