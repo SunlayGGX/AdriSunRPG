@@ -21,8 +21,6 @@ TimeManager::~TimeManager()
 {
 }
 
-#include <iostream>
-
 void TimeManager::initialize()
 {
     if(!m_run)
