@@ -2,10 +2,6 @@
 
 #include "GameConfig.h"
 
-#include "GlobalEngine.h"
-
-#include <thread>
-#include <mutex>
 
 using namespace MoonRPG;
 
