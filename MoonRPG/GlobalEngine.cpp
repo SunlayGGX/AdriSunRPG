@@ -1,8 +1,12 @@
 #include "GlobalEngine.h"
 
 #include "RenderEngine.h"
+#include "InputEngine.h"
+#include "WindowManager.h"
 
 #include "GameConfig.h"
+
+#include <thread>
 
 using namespace MoonRPG;
 
@@ -21,6 +25,8 @@ GlobalEngine::~GlobalEngine()
 void GlobalEngine::initialize()
 {
     RenderEngine::instance().initialize();
+
+    this->startInputAndWindowsThread();
 }
 
 void GlobalEngine::destroy()
@@ -54,6 +60,30 @@ void GlobalEngine::run()
 void GlobalEngine::quit()
 {
     m_run = false;
+}
+
+void GlobalEngine::startInputAndWindowsThread() const
+{
+    std::thread
+    {
+        [&run = this->m_run, &windowMgr = WindowManager::instance(), &inputMgr = InputEngine::instance()]() 
+    {
+        windowMgr.initialize();
+        inputMgr.initialize();
+
+        inputMgr.createKeyboard(windowMgr.getWindowHandle());
+
+        while(run)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds{ 1000 / MoonRPG::ENGINE_FPS/*MoonRPG::WINDOWS_THREAD_UPDATE_RATE_IN_MILLISECONDS*/ });
+            inputMgr.update();
+            windowMgr.update();
+        }
+
+        inputMgr.destroy();
+        windowMgr.destroy();
+    }}.detach();
+}
 
 bool GlobalEngine::isFullyInitialized() const
 {
