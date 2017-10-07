@@ -60,11 +60,11 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ForcedIncludeFiles>MoonRPGPch.h</ForcedIncludeFiles>
       <PrecompiledHeaderFile>MoonRPGPch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(MOONRPG_DEVEL)/MoonRPGHelper/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MOONRPG_DEVEL)/MoonRPGHelper/;$(MOONRPG_DEVEL)/MoonRPGInput/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(MOONRPG_DEPEND)/MoonRPG/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(MOONRPG_DEPEND)/MoonRPG/;$(MOONRPG_DEPEND)/DirectX/Lib/x64/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -77,13 +77,13 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>MoonRPGPch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>MoonRPGPch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(MOONRPG_DEVEL)/MoonRPGHelper/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MOONRPG_DEVEL)/MoonRPGHelper/;$(MOONRPG_DEVEL)/MoonRPGInput/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(MOONRPG_DEPEND)/MoonRPG/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(MOONRPG_DEPEND)/MoonRPG/;$(MOONRPG_DEPEND)/DirectX/Lib/x64/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
