@@ -85,6 +85,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LoggerManager.h" />
     <ClInclude Include="MoonRPGHelperPch.h" />
     <ClInclude Include="MoonSingleton.h" />
     <ClInclude Include="CRTPHierarchy.h" />
