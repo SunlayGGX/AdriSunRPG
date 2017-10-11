@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <fstream>
 #include <unordered_map>
 #include <mutex>
@@ -39,12 +38,11 @@
 namespace MoonRPG
 {
 
-
     /**
      * Defines the level of logs.
      * Lowest value is for more critical logs. (Error < DEBUG)
      */
-    enum class LogLevel
+    enum class LogLevel : int8_t
     {
         Error,      // Lowest Log level: Critical.
         Warning,    // Log that is not critical but may represent a threat
@@ -81,7 +79,7 @@ namespace MoonRPG
     {
         public:
 
-            /** List of available channels */
+            /** List of available channels. */
             enum Output
             {
                 Vs,         // Visual Studio
@@ -91,14 +89,20 @@ namespace MoonRPG
 
         protected:
 
-            /** Name of the file associated with this channel. (Full path + name + ext) */
-            char *filePath = nullptr;
+            /**
+             * Name of the file associated with this channel.
+             * (Full path + name + ext)
+             */
+            std::string logFilePath;
+
+            /**
+             * Stream used to write in file.
+             */
+            std::ofstream fileOutputStream;
 
 
         protected:
-
             LogChannel() = default;
-            explicit LogChannel(char *filePath) : filePath(filePath) {}
             virtual ~LogChannel() = default;
 
         public:
@@ -109,47 +113,34 @@ namespace MoonRPG
              *
              * \param message The message to print in the channel.
              */
-            virtual void writeInChannel(char const* message) const = 0;
+            virtual void writeInChannel(std::string const& message) const = 0;
 
             /**
              * Write a message in the associated file and add a line return.
-             * Message is printed as it is.
-             * If no file is linked with this channel, do nothing.
+             * Message is printed as it is (Not format added etc).
+             * Do nothing no file is set (stream not open).
              *
              * \param message The message to print in the channel.
              */
-            void writeInFile(char const* message) const
-            {
-                if (this->filePath != nullptr)
-                {
-                    std::ofstream os;
-                    os.open(this->filePath);
-                    os << message << std::endl;
-                    os.close();
-                }
-            }
+            void writeInFile(std::string const& message);
 
 
         public:
-            void setFilePath(char *filePath)
-            {
-                this->filePath = filePath;
-            }
-    };
 
+            /**
+             * Change the value of the logFilePath and open the new stream.
+             */
+            void setFilePath(std::string& filePath);
+    };
 
     /**
      * LogChannel implementation for Visual Studio output.
      */
-    class LogChannelVS : public LogChannel {
+    class LogChannelVS : public LogChannel
+    {
         public:
-            void writeInChannel(char const* message) const
-            {
-                std::cout << "[TODO VS Not implemented] " << message << std::endl;
-                //OutputDebugString((LPCWSTR)message);
-            }
+            void writeInChannel(std::string const& message) const override;
     };
-
 
     /**
      * LogChannel implementation for std::cout output.
@@ -157,10 +148,7 @@ namespace MoonRPG
     class LogChannelCout : public LogChannel
     {
         public:
-            void writeInChannel(char const* message) const
-            {
-                std::cout << message << std::endl;
-            }
+            void writeInChannel(std::string const& message) const override;
     };
 
 
@@ -181,27 +169,21 @@ namespace MoonRPG
 
             LogLevel				logLevel;
             LogChannel::Output		channel;
-            char const*		        message;
-            const char*             filePosition;
+            std::string		        message;
+
+            std::string             filePosition;
             const int               linePosition;
             const time_t            creationTime;
 
         public:
-            LogMessage(const LogLevel logLevel, const LogChannel::Output channel, char const* message)
-                : logLevel(logLevel),
-                  channel(channel),
-                  message(message),
-                  creationTime(std::time(0)),
-                  filePosition(__FILE__),
-                  linePosition(__LINE__)
-            {}
+            LogMessage(const LogLevel logLevel,
+                       const LogChannel::Output channel,
+                       std::string&& message,
+                       std::string&& file,
+                       const int line);
 
 
         public:
-            LogChannel::Output getLogChannel() const
-            {
-                return this->channel;
-            }
 
             /**
              * Returns the Formatted version of the message.
@@ -212,55 +194,12 @@ namespace MoonRPG
              *
              * \return Pointer to the static variable that has the formated message.
              */
-            char const* getFormattedMessage() const
+            const std::string getFormattedMessage() const;
+
+            /** Returns the logChannel associated with this LogMessage */
+            LogChannel::Output getLogChannel() const
             {
-                /*
-                 * Dev note: all LogMessages share the same statc formatedMessage.
-                 * This is for space use, but require to use the result before
-                 * calling this function for another message.
-                 */
-
-                // Ugly switch (We could create a class for each LogLevel otherwise)
-                switch (this->logLevel) {
-
-                    case LogLevel::Error:
-                        snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                                 "[%s] [ERROR]: %s",
-                                 std::ctime(&creationTime), message);
-                        break;
-                    case LogLevel::Warning:
-                        snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                                 "[%s] [WARNING]: %s",
-                                 std::ctime(&creationTime), message);
-                        break;
-                    case LogLevel::Config:
-                        snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                                 "[%s] [CONFIG]: %s",
-                                 std::ctime(&creationTime), message);
-                        break;
-                    case LogLevel::Info:
-                        snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                                 "[%s] [INFO]: %s",
-                                 std::ctime(&creationTime), message);
-                        break;
-                    case LogLevel::Trace:
-                        snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                                 "[%s : %d] [TRACE]: %s",
-                                 filePosition, linePosition, message);
-                        break;
-                    case LogLevel::Debug:
-                        snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                                 "[%s : %d] [DEBUG]: %s",
-                                 filePosition, linePosition, message);
-                        break;
-                    default:
-                        snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                                 "[%s : %d] [Unknown LogLevel]: %s",
-                                 filePosition, linePosition, message);
-                        break;
-                }
-
-                return formattedMessage;
+                return this->channel;
             }
     };
 
@@ -271,6 +210,7 @@ namespace MoonRPG
 
     /**
      * The main logger manager (Singleton).
+     * All functions are thread safe.
      *
      * \remark
      * By default, logs are only displayed in channels.
@@ -281,7 +221,6 @@ namespace MoonRPG
      * Only logs with lower or equal enum value are displayed.
      * (See LogLevel Enum).
      *
-     * 
      * \author  Constantin Masson
      * \date    Oct, 2017
      */
@@ -293,26 +232,39 @@ namespace MoonRPG
             // Attributs
             // -----------------------------------------------------------------
 
-            std::atomic_bool isRunning; // Atomic in case run called simultaneously
+            /** True if this Logger is Running */
+            std::atomic_bool isRunning;
+
+            /** The current used log level (From LogLevel enum). */
+            std::atomic_int8_t currentLogLevel; // LogLevel type
 
             /** If true, all logs are also written in files. */
-            bool logInFileMode;
+            std::atomic_bool isLogingInFile;
 
             /** Path the the folder with logs. */
-            char *logPath;
+            std::string logFilePath;
 
-            /** The current used log level. */
-            LogLevel currentLogLevel;
+            /** Access mutex for logFilePath */
+            std::mutex logFilePathAccessMutex;
 
             /** Map of all registered and available output channels. */
             std::unordered_map<LogChannel::Output, LogChannel&> mapChannels;
 
+            /** Vector of logs */
             std::vector<LogMessage>		queueLogs1;
             std::vector<LogMessage>		queueLogs2;
-            std::vector<LogMessage>*	queueLogsFront; // We process these logs
-            std::vector<LogMessage>*	queueLogsBack; // We queue logs here
 
-            std::mutex queueMutex;
+            /** Point to the vector currently processed by the Logger. */
+            std::vector<LogMessage>*	queueLogsFront;
+
+            /** Point to the vector where logs are queued. */
+            std::vector<LogMessage>*	queueLogsBack;
+
+            /** Mutex for Front log queues access */
+            std::mutex queuesFrontAccessMutex;
+
+            /** Mutex for Back log queues access */
+            std::mutex queuesBackAccessMutex;
 
 
         private:
@@ -321,29 +273,9 @@ namespace MoonRPG
             // -----------------------------------------------------------------
             GENERATE_CODE_FROM_MoonSingleton(LoggerManager);
 
-            void initialize()
-            {
-                this->isRunning			= false;
-                this->currentLogLevel	= LogLevel::Debug;
-                this->queueLogsFront	= &queueLogs1;
-                this->queueLogsBack		= &queueLogs2;
-                this->logInFileMode     = false;
-
-                // TODO Tmp (Use singleton later)
-                LogChannelVS vs;
-                LogChannelCout co;
-                this->mapChannels.clear();
-                //this->mapChannels.insert(LogChannel::Vs, &vs);
-                //this->mapChannels.insert(LogChannel::Cout, &co);
-            }
-
-            void destroy()
-            {
-                this->isRunning = false;
-                this->mapChannels.clear();
-                this->queueLogs1.clear();
-                this->queueLogs2.clear();
-            }
+        public:
+            void initialize() override;
+            void destroy() override;
 
 
         public:
@@ -352,7 +284,7 @@ namespace MoonRPG
             // -----------------------------------------------------------------
 
             /**
-             * Queue a Log.
+             * Queue a Log if level is accepted by current Log settings.
              * Log is queued to be written in the respective LogChannel.
              * Current loggerManager level is used to bypass logs with superior
              * level (Less critical logs) than current level.
@@ -364,43 +296,21 @@ namespace MoonRPG
              * \param output    Channel to use with this message.
              * \param message   The row message to display.
              */
-            void queueLog(LogLevel level, LogChannel::Output output, char const* message)
-            {
-                if (this->currentLogLevel <= level)
-                {
-                    std::lock_guard<std::mutex> lock(queueMutex);
-                    this->queueLogsBack->emplace_back(level, output, message);
-                }
-            }
+            void queueLog(LogLevel level, LogChannel::Output output,
+                          char const* message);
 
             /**
              * Run the LoggerEngine in a new thread.
              * LoggerEngine can be started only if it's not already running.
              *
+             * \warning
+             * Not thread safe, should be called in one thread.
+             * (In a really unlucky scenario, they might be a TOCTTOU:
+             * run may be started in both threads).
+             *
              * \return True is successfully started, otherwise, return false.
              */
-            bool run()
-            {
-                if (!this->isRunning)
-                {
-                    this->isRunning = true;
-
-                    std::thread
-                    {
-                        [this]() {
-                            while (this->isRunning)
-                            {
-                                this->processFrontQueue();
-                                this->swapQueues();
-                                //TODO Maybe wait for front queue to be not empty
-                            }
-                        }
-                    }.detach();
-
-                    return true;
-                }
-                return false;
-            }
+            bool run();
 
 
         private:
@@ -409,69 +319,58 @@ namespace MoonRPG
             // -----------------------------------------------------------------
 
             /**
-             * Process each elements from the front queue and clear it.
-             *
-             * \remark
-             * Not thread safe, only used internally.
+             * Queue a log, regardless any settings.
              */
-            void processFrontQueue()
-            {
-                for (LogMessage& msg : *this->queueLogsFront) {
+            void internalQueueLog(LogLevel level, LogChannel::Output output,
+                                  std::string message);
 
-                    LogChannel const& channel = this->mapChannels.at(msg.getLogChannel());
-                    channel.writeInChannel(msg.getFormattedMessage());
-
-                    if (this->logInFileMode)
-                    {
-                        channel.writeInFile(msg.getFormattedMessage());
-                    }
-                }
-                this->queueLogsFront->clear();
-            }
+            /**
+             * Process each elements from the front queue and clear it.
+             */
+            void processFrontQueue();
 
             /**
              * Swap front and back queue buffers.
-             * Thread safe.
              */
-            void swapQueues()
-            {
-                std::lock_guard<std::mutex> lock(queueMutex);
-                std::vector<LogMessage>* ptr;
-                ptr = this->queueLogsFront;
-                this->queueLogsFront = this->queueLogsBack;
-                this->queueLogsBack = ptr;
-            }
+            void swapQueues();
 
         public:
             // -----------------------------------------------------------------
             // Getters - Setters
             // -----------------------------------------------------------------
 
-            /** Change the current log level. */
+            /** Changes the current log level. */
             void setLogLevel(const LogLevel level)
             {
-                this->currentLogLevel = level;
+                this->currentLogLevel = static_cast<int8_t>(level);
             }
 
             /** Returns the current log level. */
             LogLevel getLogLevel() const
             {
-                return this->currentLogLevel;
+                return static_cast<LogLevel>(this->currentLogLevel.load());
             }
 
-            /** Logs are no longer put in files */
+            /** Logs are no longer put in files. (Path to log file is not changed). */
             void disableLogInFile()
             {
-                this->logInFileMode = false;
+                this->isLogingInFile = false;
             }
 
-            void activateLogInFile(char * path)
+            /** Logs are put in files. (Use log file path currently set). */
+            void enableLogInFile()
             {
-                this->logPath = path;
-                this->logInFileMode = true;
+                this->isLogingInFile = true;
             }
 
-    }; // LoggerManager
+            /** Set the path to use for logs. */
+            void setLogFilePath(std::string const& newPathToLog)
+            {
+                std::lock_guard<std::mutex> lock(logFilePathAccessMutex);
+                this->logFilePath = newPathToLog;
+            }
+
+    }; // End LoggerManager
 
 
 } // End MoonRPG Namespace
