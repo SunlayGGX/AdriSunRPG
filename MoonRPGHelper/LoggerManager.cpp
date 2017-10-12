@@ -45,12 +45,14 @@ void LoggerManager::destroy()
 // User methods
 // -----------------------------------------------------------------------------
 
-void LoggerManager::queueLog(LogLevel level, LogChannel::Output output, char const* message)
+void LoggerManager::queueLog(LogLevel level, LogChannel::Output output,
+                             char const* message,
+                             char const* file,
+                             int line)
 {
-
     if (this->currentLogLevel.load() >= static_cast<int8_t>(level))
     {
-        this->internalQueueLog(level, output, message);
+        this->internalQueueLog(level, output, message, file, line);
     }
 }
 
@@ -67,8 +69,14 @@ bool LoggerManager::run()
                 {
                     this->processFrontQueue();
                     this->swapQueues();
-                    // Just sleep for 1 sec, otherwise, would use to many CPU
-                    std::this_thread::sleep_for(std::chrono::milliseconds{1000});
+                    if (this->queueLogsFront->empty()) {
+                        // Just sleep for 1 sec, otherwise, would use to many CPU
+                        std::this_thread::sleep_for(std::chrono::milliseconds{1000});
+                    }
+                    else
+                    {
+                        std::this_thread::sleep_for(std::chrono::milliseconds{100});
+                    }
                 }
             }
         }.detach();
@@ -83,11 +91,14 @@ bool LoggerManager::run()
 // Internal methods
 // -----------------------------------------------------------------------------
 
-void LoggerManager::internalQueueLog(LogLevel level, LogChannel::Output output, std::string message)
+void LoggerManager::internalQueueLog(LogLevel level, LogChannel::Output output,
+                                     std::string message,
+                                     std::string file, 
+                                     const int line)
 {
     // Message passed by copie, otherwise, local scope of variable would destroye it.
     std::lock_guard<std::mutex> lock(queuesBackAccessMutex);
-    this->queueLogsBack->emplace_back(level, output, std::move(message), __FILE__, __LINE__);
+    this->queueLogsBack->emplace_back(level, output, std::move(message), std::move(file), line);
 }
 
 void LoggerManager::processFrontQueue()
