@@ -10,26 +10,24 @@
 int main() try
 {
     MoonRPG::LoggerManager::instance().initialize();
+    MoonRPG::LoggerManager::instance().run();
 
-    LOG_CONFIG("Install Engine");
     MoonRPG::AutoEngineInstaller installEngine;
 
-    LOG_INFO("Start Running Engine");
     MoonRPG::GlobalEngine::instance().run();
 
     return 0;
 }
 catch(const std::exception& exception)
 {
-    //TODO : LOG the error exception.what() and dump the application state.
-    LOG_ERROR(exception.what()); // Add application state
+    LOG_ERROR(exception.what()); // Add dump application state
 
-    ::MessageBoxA(NULL, exception.what(), "Erreur", MB_ICONERROR);
+    ::MessageBoxA(NULL, exception.what(), "Error", MB_ICONERROR);
     return -99;
 }
 catch(...)
 {
-    //TODO : LOG there was an error and dump the application state.
-    ::MessageBoxA(NULL, "Unidentified error", "Erreur", MB_ICONERROR);
+    LOG_ERROR("Unknown error"); // Add dump application state
+    ::MessageBoxA(NULL, "Unidentified error", "Error", MB_ICONERROR);
     return -100;
 }

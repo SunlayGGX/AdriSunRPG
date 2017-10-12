@@ -40,7 +40,8 @@ namespace MoonRPG
 
     /**
      * Defines the level of logs.
-     * Lowest value is for more critical logs. (Error < DEBUG)
+     * Lowest value is for more critical logs. (Error < DEBUG).
+     * int8_t is only for little place optim + use with atomic_int8_t.
      */
     enum class LogLevel : int8_t
     {
@@ -70,6 +71,7 @@ namespace MoonRPG
      * written in files.
      *
      * \note
+     * HOW TO ADD A NEW LOG CHANNEL IN YOUR LOGGERS LIST:
      * To implement a new LogChannel:
      *  inherit this class, 
      *  add new constant in LogChannel::Output,
@@ -78,7 +80,6 @@ namespace MoonRPG
     class LogChannel
     {
         public:
-
             /** List of available channels. */
             enum Output
             {
@@ -99,11 +100,6 @@ namespace MoonRPG
              * Stream used to write in file.
              */
             std::ofstream fileOutputStream;
-
-
-        protected:
-            LogChannel() = default;
-            virtual ~LogChannel() = default;
 
         public:
 
@@ -162,11 +158,6 @@ namespace MoonRPG
     class LogMessage {
 
         private:
-
-            /** Max size of a log message (Debug format included) */
-            static const int        MAX_MESSAGE_SIZE = 255;
-            static char             formattedMessage[MAX_MESSAGE_SIZE + 1];
-
             LogLevel				logLevel;
             LogChannel::Output		channel;
             std::string		        message;
@@ -217,7 +208,7 @@ namespace MoonRPG
      * logInFileMode may be set to also write all logs in files.
      * 
      * \remark
-     * log level may be set to choose which logs are bypassed.
+     * Log level may be set to choose which logs are bypassed.
      * Only logs with lower or equal enum value are displayed.
      * (See LogLevel Enum).
      *
@@ -248,7 +239,10 @@ namespace MoonRPG
             std::mutex logFilePathAccessMutex;
 
             /** Map of all registered and available output channels. */
-            std::unordered_map<LogChannel::Output, LogChannel&> mapChannels;
+            std::unordered_map<
+                LogChannel::Output,
+                std::unique_ptr<LogChannel>
+            > lookupChannels;
 
             /** Vector of logs */
             std::vector<LogMessage>		queueLogs1;

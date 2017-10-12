@@ -17,26 +17,25 @@ LoggerManager::~LoggerManager() {}
 
 void LoggerManager::initialize()
 {
-    this->isRunning         = false;
-    this->currentLogLevel   = static_cast<int8_t>(LogLevel::Debug);
+    this->isRunning         = false; // Don't set true, run would faild.
     this->queueLogsFront    = &queueLogs1;
     this->queueLogsBack     = &queueLogs2;
     this->isLogingInFile    = false;
+    this->currentLogLevel   = static_cast<int8_t>(LogLevel::Debug);
 
-    // TODO Tmp (Use singleton later)
-    LogChannelVS vs;
-    LogChannelCout co;
-    this->mapChannels.clear();
-    //this->mapChannels.insert(LogChannel::Vs, &vs);
-    //this->mapChannels.insert(LogChannel::Cout, &co);
+    // Register all available log channels. Ifnew channels created, add here.
+    this->lookupChannels.insert(std::make_pair(LogChannel::Vs, std::unique_ptr<LogChannelVS>(new LogChannelVS())));
+    this->lookupChannels.insert(std::make_pair(LogChannel::Cout, std::unique_ptr<LogChannelCout>(new LogChannelCout())));
 }
+
 
 void LoggerManager::destroy()
 {
     this->isRunning = false;
+    this->isLogingInFile = false;
     std::lock_guard<std::mutex> lock1(queuesFrontAccessMutex);
     std::lock_guard<std::mutex> lock2(queuesBackAccessMutex);
-    this->mapChannels.clear();
+    this->lookupChannels.clear();
     this->queueLogs1.clear();
     this->queueLogs2.clear();
 }
@@ -48,7 +47,8 @@ void LoggerManager::destroy()
 
 void LoggerManager::queueLog(LogLevel level, LogChannel::Output output, char const* message)
 {
-    if (this->currentLogLevel <= static_cast<int8_t>(level))
+
+    if (this->currentLogLevel.load() >= static_cast<int8_t>(level))
     {
         this->internalQueueLog(level, output, message);
     }
@@ -95,13 +95,13 @@ void LoggerManager::processFrontQueue()
     std::lock_guard<std::mutex> lock(queuesFrontAccessMutex);
 
     for (LogMessage& msg : *this->queueLogsFront) {
-        LogChannel& channel             = this->mapChannels.at(msg.getLogChannel());
-        std::string formattedMessage    = msg.getFormattedMessage();
 
-        channel.writeInChannel(formattedMessage);
+        std::string formattedMessage = msg.getFormattedMessage();
+
+        lookupChannels[msg.getLogChannel()]->writeInChannel(formattedMessage);
         if (this->isLogingInFile)
         {
-            channel.writeInFile(formattedMessage);
+            lookupChannels[msg.getLogChannel()]->writeInFile(formattedMessage);
         }
     }
     this->queueLogsFront->clear();

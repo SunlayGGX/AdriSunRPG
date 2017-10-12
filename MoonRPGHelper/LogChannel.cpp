@@ -34,7 +34,7 @@ void LogChannel::setFilePath(std::string& filePath)
 
 void LogChannelVS::writeInChannel(std::string const& message) const
 {
-    //OutputDebugStringA(static_cast<LPCSTR>(message));
+    OutputDebugStringA(static_cast<LPCSTR>(message.c_str()));
 }
 
 void LogChannelCout::writeInChannel(std::string const& message) const
