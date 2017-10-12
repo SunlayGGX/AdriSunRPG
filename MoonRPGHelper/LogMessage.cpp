@@ -5,7 +5,11 @@
 #include "MoonRPGHelperPch.h"
 #include "LoggerManager.h"
 
+#include <sstream>
+#include <string>
+
 using namespace MoonRPG;
+
 
 LogMessage::LogMessage(const LogLevel logLevel,
                        const LogChannel::Output channel,
@@ -22,6 +26,10 @@ LogMessage::LogMessage(const LogLevel logLevel,
 
 const std::string LogMessage::getFormattedMessage() const
 {
+
+    std::ostringstream oss117;
+    oss117 << this->message << std::endl;
+    return oss117.str();
 
     //TODO (With std::chrono)
 
@@ -74,5 +82,4 @@ const std::string LogMessage::getFormattedMessage() const
 
     return formattedMessage;
     */
-    return this->message;
 }
