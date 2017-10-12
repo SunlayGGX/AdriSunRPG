@@ -26,60 +26,41 @@ LogMessage::LogMessage(const LogLevel logLevel,
 
 const std::string LogMessage::getFormattedMessage() const
 {
+    std::chrono::time_point<std::chrono::system_clock> now;
+    now                 = std::chrono::system_clock::now();
+    time_t t            = std::chrono::system_clock::to_time_t(now);
+    std::string dateStr = ctime(&t);
+    dateStr              .resize(dateStr.size() - 1);
 
-    std::ostringstream oss117;
-    oss117 << this->message << std::endl;
-    return oss117.str();
 
-    //TODO (With std::chrono)
+    std::ostringstream os;
 
-    /*
-    * Dev note: all LogMessages share the same statc formatedMessage.
-    * This is for space use, but require to use the result before
-    * calling this function for another message.
-    */
 
-    /*
     // Ugly switch (We could create a class for each LogLevel otherwise)
     switch (this->logLevel) {
 
         case LogLevel::Error:
-            snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                     "[%s] [ERROR]: %s",
-                     std::ctime(&creationTime), message);
+            os << "[" << dateStr << "]" << " [ERROR]: " << this->message;
             break;
         case LogLevel::Warning:
-            snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                     "[%s] [WARNING]: %s",
-                     std::ctime(&creationTime), message);
+            os << "[" << dateStr << "]" << " [WARNING]: " << this->message;
             break;
         case LogLevel::Config:
-            snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                     "[%s] [CONFIG]: %s",
-                     std::ctime(&creationTime), message);
+            os << "[" << dateStr << "]" << " [CONFIG]: " << this->message;
             break;
         case LogLevel::Info:
-            snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                     "[%s] [INFO]: %s",
-                     std::ctime(&creationTime), message);
+            os << "[" << dateStr << "]" << " [INFO]: " << this->message;
             break;
         case LogLevel::Trace:
-            snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                     "[%s : %d] [TRACE]: %s",
-                     filePosition, linePosition, message);
+            os << "[" << dateStr << "]" << " [TRACE]: " << this->message;
             break;
         case LogLevel::Debug:
-            snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                     "[%s : %d] [DEBUG]: %s",
-                     filePosition, linePosition, message);
+            os << "[" << dateStr << "] [" << this->filePosition << ": " << this->linePosition << "] [DEBUG]: " << this->message;
             break;
         default:
-            snprintf(formattedMessage, MAX_MESSAGE_SIZE,
-                     "[%s : %d] [Unknown LogLevel]: %s",
-                     filePosition, linePosition, message);
+            os << "[" << dateStr << "]" << " [Unknown LogLevel]: " << this->message;
             break;
     }
 
-    return formattedMessage;
-    */
+    return os.str();
 }

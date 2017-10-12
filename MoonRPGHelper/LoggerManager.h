@@ -13,19 +13,19 @@
 // End user macros
 // -----------------------------------------------------------------------------
 
-#define LOG_VS_ERROR(msg)       MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Error,  MoonRPG::LogChannel::Vs, msg)
-#define LOG_VS_WARNING(msg)     MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Warning,MoonRPG::LogChannel::Vs, msg)
-#define LOG_VS_CONFIG(msg)      MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Config, MoonRPG::LogChannel::Vs, msg)
-#define LOG_VS_INFO(msg)        MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Info,   MoonRPG::LogChannel::Vs, msg)
-#define LOG_VS_TRACE(msg)       MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Trace,  MoonRPG::LogChannel::Vs, msg)
-#define LOG_VS_DEBUG(msg)       MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Debug,  MoonRPG::LogChannel::Vs, msg)
+#define LOG_VS_ERROR(msg)       MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Error,  MoonRPG::LogChannel::Vs, msg, __FILE__, __LINE__)
+#define LOG_VS_WARNING(msg)     MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Warning,MoonRPG::LogChannel::Vs, msg, __FILE__, __LINE__)
+#define LOG_VS_CONFIG(msg)      MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Config, MoonRPG::LogChannel::Vs, msg, __FILE__, __LINE__)
+#define LOG_VS_INFO(msg)        MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Info,   MoonRPG::LogChannel::Vs, msg, __FILE__, __LINE__)
+#define LOG_VS_TRACE(msg)       MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Trace,  MoonRPG::LogChannel::Vs, msg, __FILE__, __LINE__)
+#define LOG_VS_DEBUG(msg)       MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Debug,  MoonRPG::LogChannel::Vs, msg, __FILE__, __LINE__)
 
-#define LOG_COUT_ERROR(msg)     MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Error,  MoonRPG::LogChannel::Cout, msg)
-#define LOG_COUT_WARNING(msg)   MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Warning,MoonRPG::LogChannel::Cout, msg)
-#define LOG_COUT_CONFIG(msg)    MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Config, MoonRPG::LogChannel::Cout, msg)
-#define LOG_COUT_INFO(msg)      MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Info,   MoonRPG::LogChannel::Cout, msg)
-#define LOG_COUT_TRACE(msg)     MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Trace,  MoonRPG::LogChannel::Cout, msg)
-#define LOG_COUT_DEBUG(msg)     MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Debug,  MoonRPG::LogChannel::Cout, msg)
+#define LOG_COUT_ERROR(msg)     MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Error,  MoonRPG::LogChannel::Cout, msg, __FILE__, __LINE__)
+#define LOG_COUT_WARNING(msg)   MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Warning,MoonRPG::LogChannel::Cout, msg, __FILE__, __LINE__)
+#define LOG_COUT_CONFIG(msg)    MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Config, MoonRPG::LogChannel::Cout, msg, __FILE__, __LINE__)
+#define LOG_COUT_INFO(msg)      MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Info,   MoonRPG::LogChannel::Cout, msg, __FILE__, __LINE__)
+#define LOG_COUT_TRACE(msg)     MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Trace,  MoonRPG::LogChannel::Cout, msg, __FILE__, __LINE__)
+#define LOG_COUT_DEBUG(msg)     MoonRPG::LoggerManager::instance().queueLog(MoonRPG::LogLevel::Debug,  MoonRPG::LogChannel::Cout, msg, __FILE__, __LINE__)
 
 #define LOG_ERROR(msg)          LOG_VS_ERROR(msg)
 #define LOG_WARNING(msg)        LOG_VS_WARNING(msg)
@@ -290,8 +290,10 @@ namespace MoonRPG
              * \param output    Channel to use with this message.
              * \param message   The row message to display.
              */
-            void queueLog(LogLevel level, LogChannel::Output output,
-                          char const* message);
+            void queueLog(LogLevel const level, LogChannel::Output const output,
+                          char const* message,
+                          char const* file,
+                          const int line);
 
             /**
              * Run the LoggerEngine in a new thread.
@@ -316,7 +318,9 @@ namespace MoonRPG
              * Queue a log, regardless any settings.
              */
             void internalQueueLog(LogLevel level, LogChannel::Output output,
-                                  std::string message);
+                                  std::string message,
+                                  std::string file,
+                                  const int line);
 
             /**
              * Process each elements from the front queue and clear it.
