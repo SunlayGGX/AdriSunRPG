@@ -10,6 +10,7 @@
 int main() try
 {
     MoonRPG::LoggerManager::instance().initialize();
+    MoonRPG::LoggerManager::instance().enableLogInFile();
     MoonRPG::LoggerManager::instance().run();
 
     MoonRPG::AutoEngineInstaller installEngine;
