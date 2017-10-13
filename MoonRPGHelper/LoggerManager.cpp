@@ -20,12 +20,28 @@ void LoggerManager::initialize()
     this->isRunning         = false; // Don't set true, run would faild.
     this->queueLogsFront    = &queueLogs1;
     this->queueLogsBack     = &queueLogs2;
-    this->isLogingInFile    = false;
-    this->currentLogLevel   = static_cast<int8_t>(LogLevel::Debug);
+    this->isLogingInFile    = INTERNAL_LOG_SETTINGS_DEFAULT_IS_LOGIN_IN_FILE;
+    this->currentLogLevel   = static_cast<int8_t>(INTERNAL_LOG_SETTINGS_DEFAULT_LOG_LEVEL);
 
     // Register all available log channels. Ifnew channels created, add here.
+
     this->lookupChannels.insert(std::make_pair(LogChannel::Vs, std::unique_ptr<LogChannelVS>(new LogChannelVS())));
     this->lookupChannels.insert(std::make_pair(LogChannel::Cout, std::unique_ptr<LogChannelCout>(new LogChannelCout())));
+
+    if (this->isLogingInFile)
+    {
+        std::string logRootPath = INTERNAL_LOG_SETTINGS_DEFAULT_LOGPATH;
+        std::string vsLogPath = logRootPath + INTERNAL_LOG_SETTINGS_FILE_SEPARATOR + "vs.log";
+        std::string coutLogPath = logRootPath + INTERNAL_LOG_SETTINGS_FILE_SEPARATOR + "cout.log";
+
+        lookupChannels[LogChannel::Vs]->linkWithFile(vsLogPath);
+        lookupChannels[LogChannel::Cout]->linkWithFile(coutLogPath);
+
+        if (INTERNAL_LOG_SETTINGS_FLUSH_LOG_FILE_AT_START) {
+            lookupChannels[LogChannel::Vs]->flushLogFile();
+            lookupChannels[LogChannel::Cout]->flushLogFile();
+        }
+    }
 }
 
 

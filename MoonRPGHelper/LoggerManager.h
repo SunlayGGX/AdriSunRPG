@@ -35,6 +35,15 @@
 #define LOG_DEBUG(msg)          LOG_VS_DEBUG(msg)
 
 
+// -----------------------------------------------------------------------------
+// Some settings
+// -----------------------------------------------------------------------------
+#define INTERNAL_LOG_SETTINGS_DEFAULT_LOGPATH std::getenv("MOONRPG_DEPEND")
+#define INTERNAL_LOG_SETTINGS_FILE_SEPARATOR "\\"
+#define INTERNAL_LOG_SETTINGS_DEFAULT_IS_LOGIN_IN_FILE true
+#define INTERNAL_LOG_SETTINGS_DEFAULT_LOG_LEVEL LogLevel::Debug
+#define INTERNAL_LOG_SETTINGS_FLUSH_LOG_FILE_AT_START true
+
 namespace MoonRPG
 {
 
@@ -89,20 +98,31 @@ namespace MoonRPG
 
 
         protected:
-
-            /**
-             * Name of the file associated with this channel.
-             * (Full path + name + ext)
-             */
-            std::string logFilePath;
+            /** Full path of the log file (path + name + ext) */
+            std::string pathLogFile;
 
             /**
              * Stream used to write in file.
+             * If a log file is set, this stream is open (With the logFilePath).
              */
             std::ofstream fileOutputStream;
 
-        public:
 
+        protected:
+            // -----------------------------------------------------------------
+            // Methods for channel
+            // -----------------------------------------------------------------
+            /** Creates a new LogChannel (Not linked with a file) */
+            LogChannel() = default;
+
+            /** Creates a new LogChannel linked with the given file */
+            LogChannel(std::string const& filePath);
+
+        public:
+            virtual ~LogChannel();
+
+
+        public:
             /**
              * Write a message in this channel and add a line return.
              * Message is printed as it is.
@@ -111,22 +131,48 @@ namespace MoonRPG
              */
             virtual void writeInChannel(std::string const& message) const = 0;
 
+
+        public:
+            // -----------------------------------------------------------------
+            // Methods for file
+            // -----------------------------------------------------------------
+
             /**
              * Write a message in the associated file and add a line return.
              * Message is printed as it is (Not format added etc).
-             * Do nothing no file is set (stream not open).
+             * Do nothing if no file is set.
              *
              * \param message The message to print in the channel.
              */
             void writeInFile(std::string const& message);
 
-
-        public:
+            /**
+             * Link this LogChannel with the given file.
+             * Enable all operations on this LogChannel's file.
+             * If already linked with a file, change it with this new file.
+             *
+             * \warning
+             * If given file doesn't exists, it will be created.
+             *
+             * \remark
+             * Use append mode.
+             */
+            void linkWithFile(std::string const& filePath);
 
             /**
-             * Change the value of the logFilePath and open the new stream.
+             * Remove the link file.
+             * Disable all operations on this LogChannel's file.
              */
-            void setFilePath(std::string& filePath);
+            void unlinkFile();
+
+            /**
+             * Flush the content of the file linked with this channel.
+             * Do nothing if no file linked with this channel.
+             *
+             * \warning
+             * This erase the whole content of the linked file.
+             */
+            void flushLogFile();
     };
 
     /**
@@ -134,6 +180,9 @@ namespace MoonRPG
      */
     class LogChannelVS : public LogChannel
     {
+        public:
+            LogChannelVS() : LogChannel() {};
+            LogChannelVS(std::string const& filePath) : LogChannel(filePath) {};
         public:
             void writeInChannel(std::string const& message) const override;
     };
@@ -143,6 +192,9 @@ namespace MoonRPG
      */
     class LogChannelCout : public LogChannel
     {
+        public:
+            LogChannelCout() : LogChannel() {};
+            LogChannelCout(std::string const& filePath) : LogChannel(filePath) {};
         public:
             void writeInChannel(std::string const& message) const override;
     };
