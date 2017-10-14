@@ -2,8 +2,9 @@
  * LogMessage Definitions
  * ---------------------------------------------------------------------------*/
 
-#include "MoonRPGHelperPch.h"
-#include "LoggerManager.h"
+#include "MoonRPGElephantLoggerPch.h"
+
+#include "LogMessage.h"
 
 #include <ctime>
 
@@ -15,12 +16,12 @@ LogMessage::LogMessage(const LogLevel logLevel,
                        std::string&& message,
                        std::string&& file,
                        const int line)
-    : logLevel(logLevel),
-      channel(channel),
-      message(std::move(message)),
-      filePosition(std::move(file)),
-      linePosition(line),
-      creationTime(std::time(0))
+    : m_logLevel(logLevel),
+      m_channel(channel),
+      m_message(std::move(message)),
+      m_filePosition(std::move(file)),
+      m_linePosition(line),
+      m_creationTime(std::time(0))
 {}
 
 const std::string LogMessage::getFormattedMessage() const
@@ -45,10 +46,16 @@ const std::string LogMessage::getFormattedMessage() const
 
     std::string temp = "[" + dateStr +"] ";
 
-    if (this->logLevel == LogLevel::Debug)
+    if (this->m_logLevel == LogLevel::Debug)
     {
-        temp += "[" + this->filePosition + ": " + std::to_string(this->linePosition) + "] ";
+        temp += "[" + this->m_filePosition + ": " + std::to_string(this->m_linePosition) + "] ";
     }
 
-    return temp + formatLU[static_cast<size_t>(this->logLevel)] + this->message;
+    return temp + formatLU[static_cast<size_t>(this->m_logLevel)] + this->m_message;
 }
+
+const LogChannel::Output LogMessage::getLogChannel() const
+{
+    return this->m_channel;
+}
+
