@@ -1,12 +1,7 @@
 #pragma once
 
-#include <fstream>
-#include <unordered_map>
-#include <mutex>
-#include <atomic>
-#include <ctime>
-
 #include "MoonSingleton.h"
+
 
 
 // -----------------------------------------------------------------------------
@@ -38,11 +33,11 @@
 // -----------------------------------------------------------------------------
 // Some settings
 // -----------------------------------------------------------------------------
-#define INTERNAL_LOG_SETTINGS_DEFAULT_LOGPATH std::getenv("MOONRPG_DEPEND")
+#define INTERNAL_LOG_SETTINGS_DEFAULT_LOGPATH std::experimental::filesystem::temp_directory_path().string() + "/MoonRPGLogFolder/"
 #define INTERNAL_LOG_SETTINGS_FILE_SEPARATOR "\\"
 #define INTERNAL_LOG_SETTINGS_DEFAULT_IS_LOGIN_IN_FILE true
 #define INTERNAL_LOG_SETTINGS_DEFAULT_LOG_LEVEL LogLevel::Debug
-#define INTERNAL_LOG_SETTINGS_FLUSH_LOG_FILE_AT_START true
+#define INTERNAL_LOG_SETTINGS_ERASE_LOG_FILE_AT_START true
 
 namespace MoonRPG
 {
@@ -172,7 +167,7 @@ namespace MoonRPG
              * \warning
              * This erase the whole content of the linked file.
              */
-            void flushLogFile();
+            void clearLogFile();
     };
 
     /**
@@ -300,17 +295,14 @@ namespace MoonRPG
             std::vector<LogMessage>		queueLogs1;
             std::vector<LogMessage>		queueLogs2;
 
-            /** Point to the vector currently processed by the Logger. */
-            std::vector<LogMessage>*	queueLogsFront;
-
             /** Point to the vector where logs are queued. */
-            std::vector<LogMessage>*	queueLogsBack;
+            std::vector<LogMessage>*	m_queueLogsFront;
+
+            /** Point to the vector currently processed by the Logger. */
+            std::vector<LogMessage>*	m_queueLogsBack;
 
             /** Mutex for Front log queues access */
-            std::mutex queuesFrontAccessMutex;
-
-            /** Mutex for Back log queues access */
-            std::mutex queuesBackAccessMutex;
+            std::mutex m_queuesFrontAccessMutex;
 
 
         private:
@@ -347,18 +339,10 @@ namespace MoonRPG
                           char const* file,
                           const int line);
 
-            /**
-             * Run the LoggerEngine in a new thread.
-             * LoggerEngine can be started only if it's not already running.
-             *
-             * \warning
-             * Not thread safe, should be called in one thread.
-             * (In a really unlucky scenario, they might be a TOCTTOU:
-             * run may be started in both threads).
-             *
-             * \return True is successfully started, otherwise, return false.
-             */
-            bool run();
+            
+
+
+            void saveFileToSafeDirectory(const std::string &safeDirectory) const;
 
 
         private:
@@ -375,9 +359,15 @@ namespace MoonRPG
                                   const int line);
 
             /**
-             * Process each elements from the front queue and clear it.
+            * Run the LoggerEngine in a new thread.
+            * LoggerEngine can be started only if it's not already running.
+            */
+            void internalStartLoggerThread();
+
+            /**
+             * Process each elements from the back queue and clear it.
              */
-            void processFrontQueue();
+            void processBackQueue();
 
             /**
              * Swap front and back queue buffers.

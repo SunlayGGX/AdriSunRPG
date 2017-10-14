@@ -5,6 +5,11 @@
 #include "MoonRPGHelperPch.h"
 #include "LoggerManager.h"
 
+#include "GameConfig.h"
+
+#include <ctime>
+#include <experimental/filesystem>
+
 using namespace MoonRPG;
 
 
@@ -17,9 +22,14 @@ LoggerManager::~LoggerManager() {}
 
 void LoggerManager::initialize()
 {
-    this->isRunning         = false; // Don't set true, run would faild.
-    this->queueLogsFront    = &queueLogs1;
-    this->queueLogsBack     = &queueLogs2;
+    if (this->isRunning)
+    {
+        return;
+    }
+
+    this->isRunning         = true;
+    this->m_queueLogsFront  = &queueLogs1;
+    this->m_queueLogsBack   = &queueLogs2;
     this->isLogingInFile    = INTERNAL_LOG_SETTINGS_DEFAULT_IS_LOGIN_IN_FILE;
     this->currentLogLevel   = static_cast<int8_t>(INTERNAL_LOG_SETTINGS_DEFAULT_LOG_LEVEL);
 
@@ -37,25 +47,52 @@ void LoggerManager::initialize()
         lookupChannels[LogChannel::Vs]->linkWithFile(vsLogPath);
         lookupChannels[LogChannel::Cout]->linkWithFile(coutLogPath);
 
-        if (INTERNAL_LOG_SETTINGS_FLUSH_LOG_FILE_AT_START) {
-            lookupChannels[LogChannel::Vs]->flushLogFile();
-            lookupChannels[LogChannel::Cout]->flushLogFile();
+        if (INTERNAL_LOG_SETTINGS_ERASE_LOG_FILE_AT_START) 
+        {
+            if (std::experimental::filesystem::exists(logRootPath))
+            {
+                //TODO
+                //std::experimental::filesystem::remove(logRootPath);
+            }
+
+            std::experimental::filesystem::create_directory(logRootPath);
         }
     }
+
+    this->internalStartLoggerThread();
+}
+
+void LoggerManager::internalStartLoggerThread()
+{
+    std::thread
+    {
+        [this]() {
+        while (this->isRunning)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds{MoonRPG::LOGGER_THREAD_UPDATE_RATE_IN_MILLISECONDS});
+            this->processBackQueue();
+            this->swapQueues();
+        }
+    }
+    }.detach();
 }
 
 
 void LoggerManager::destroy()
 {
     this->isRunning = false;
+    this->processBackQueue();
+    this->swapQueues();
+    this->processBackQueue();
     this->isLogingInFile = false;
-    std::lock_guard<std::mutex> lock1(queuesFrontAccessMutex);
-    std::lock_guard<std::mutex> lock2(queuesBackAccessMutex);
-    this->lookupChannels.clear();
-    this->queueLogs1.clear();
-    this->queueLogs2.clear();
 }
 
+void LoggerManager::saveFileToSafeDirectory(const std::string &safeDirectory) const
+{
+    // TODO
+    //std::experimental::filesystem::directory_iterator iter{INTERNAL_LOG_SETTINGS_DEFAULT_LOGPATH};
+    //std::experimental::filesystem::copy(INTERNAL_LOG_SETTINGS_DEFAULT_LOGPATH, safeDirectory);
+}
 
 // -----------------------------------------------------------------------------
 // User methods
@@ -66,40 +103,10 @@ void LoggerManager::queueLog(LogLevel level, LogChannel::Output output,
                              char const* file,
                              int line)
 {
-    if (this->currentLogLevel.load() >= static_cast<int8_t>(level))
+    if (this->isRunning && this->currentLogLevel.load() >= static_cast<int8_t>(level))
     {
         this->internalQueueLog(level, output, message, file, line);
     }
-}
-
-bool LoggerManager::run()
-{
-    if (!this->isRunning)
-    {
-        this->isRunning = true;
-
-        std::thread
-        {
-            [this]() {
-                while (this->isRunning)
-                {
-                    this->processFrontQueue();
-                    this->swapQueues();
-                    if (this->queueLogsFront->empty()) {
-                        // Just sleep for 1 sec, otherwise, would use to many CPU
-                        std::this_thread::sleep_for(std::chrono::milliseconds{1000});
-                    }
-                    else
-                    {
-                        std::this_thread::sleep_for(std::chrono::milliseconds{100});
-                    }
-                }
-            }
-        }.detach();
-
-        return true;
-    }
-    return false;
 }
 
 
@@ -113,30 +120,28 @@ void LoggerManager::internalQueueLog(LogLevel level, LogChannel::Output output,
                                      const int line)
 {
     // Message passed by copie, otherwise, local scope of variable would destroye it.
-    std::lock_guard<std::mutex> lock(queuesBackAccessMutex);
-    this->queueLogsBack->emplace_back(level, output, std::move(message), std::move(file), line);
+    std::lock_guard<std::mutex> lock(m_queuesFrontAccessMutex);
+    this->m_queueLogsFront->emplace_back(level, output, std::move(message), std::move(file), line);
 }
 
-void LoggerManager::processFrontQueue()
+void LoggerManager::processBackQueue()
 {
-    std::lock_guard<std::mutex> lock(queuesFrontAccessMutex);
-
-    for (LogMessage& msg : *this->queueLogsFront) {
-
+    for (LogMessage& msg : *this->m_queueLogsBack) 
+    {
         std::string formattedMessage = msg.getFormattedMessage();
 
-        lookupChannels[msg.getLogChannel()]->writeInChannel(formattedMessage);
+        auto& coco = lookupChannels[msg.getLogChannel()];
+        coco->writeInChannel(formattedMessage);
         if (this->isLogingInFile)
         {
-            lookupChannels[msg.getLogChannel()]->writeInFile(formattedMessage);
+            coco->writeInFile(formattedMessage);
         }
     }
-    this->queueLogsFront->clear();
+    this->m_queueLogsBack->clear();
 }
 
 void LoggerManager::swapQueues()
 {
-    std::lock_guard<std::mutex> lock1(queuesFrontAccessMutex);
-    std::lock_guard<std::mutex> lock2(queuesBackAccessMutex);
-    std::swap(this->queueLogsFront, this->queueLogsBack);
+    std::lock_guard<std::mutex> lock1(m_queuesFrontAccessMutex);
+    std::swap(this->m_queueLogsFront, this->m_queueLogsBack);
 }

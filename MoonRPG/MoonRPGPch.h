@@ -15,7 +15,8 @@
 #undef WIN32_LEAN_AND_MEAN
 
 
-
+#include "MoonRPGHelperPch.h"
+#include "MoonRPGElephantLoggerPch.h"
 #include "targetver.h"
 
 
@@ -46,7 +47,9 @@
 
 #ifdef _DEBUG
 #   pragma comment(lib, "MoonRPGHelper_d.lib")
+#   pragma comment(lib, "MoonRPGElephantLogger_d.lib")
 #else
 #   pragma comment(lib, "MoonRPGHelper.lib")
+#   pragma comment(lib, "MoonRPGElephantLogger.lib")
 #endif
 

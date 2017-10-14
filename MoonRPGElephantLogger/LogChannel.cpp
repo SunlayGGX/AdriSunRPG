@@ -5,9 +5,8 @@
 #include "MoonRPGHelperPch.h"
 #include "LoggerManager.h"
 
-#include <string>
 #include <iostream>
-#include <Windows.h>
+#include <experimental/filesystem>
 
 using namespace MoonRPG;
 
@@ -50,15 +49,12 @@ void LogChannel::unlinkFile()
     }
 }
 
-void LogChannel::flushLogFile()
+void LogChannel::clearLogFile()
 {
     if (this->fileOutputStream.is_open())
     {
         this->fileOutputStream.close();
-        this->fileOutputStream.open(this->pathLogFile, std::ios::out | std::ios::trunc);
-        this->fileOutputStream.close();
-        this->fileOutputStream.open(this->pathLogFile, std::ios::out | std::ios::app);
-        //this->fileOutputStream << "";
+        this->fileOutputStream.open(this->pathLogFile);
     }
 }
 
