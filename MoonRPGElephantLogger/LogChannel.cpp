@@ -2,11 +2,11 @@
  * LogChannel Definitions
  * ----------------------------------------------------------------------------*/
 
-#include "MoonRPGHelperPch.h"
-#include "LoggerManager.h"
+#include "MoonRPGElephantLoggerPch.h"
+
+#include "LogChannel.h"
 
 #include <iostream>
-#include <experimental/filesystem>
 
 using namespace MoonRPG;
 
@@ -24,43 +24,44 @@ LogChannel::~LogChannel()
 
 void LogChannel::writeInFile(std::string const& message)
 {
-    if (this->fileOutputStream.is_open())
+    if (this->m_fileOutputStream.is_open())
     {
-        this->fileOutputStream << message << std::endl;
+        this->m_fileOutputStream << message << std::endl;
     }
 }
 
 void LogChannel::linkWithFile(std::string const& filePath)
 {
-    if (this->fileOutputStream.is_open())
+    if (this->m_fileOutputStream.is_open())
     {
-        this->fileOutputStream.close();
+        this->m_fileOutputStream.close();
     }
-    this->pathLogFile = filePath;
-    this->fileOutputStream.open(filePath, std::ios::out | std::ios::app);
+    this->m_pathLogFile = filePath;
+    this->m_fileOutputStream.open(filePath, std::ios::out | std::ios::app);
 }
 
 void LogChannel::unlinkFile()
 {
-    if (this->fileOutputStream.is_open())
+    if (this->m_fileOutputStream.is_open())
     {
-        this->fileOutputStream.close();
-        this->pathLogFile.clear();
+        this->m_fileOutputStream.close();
+        this->m_pathLogFile.clear();
     }
 }
 
 void LogChannel::clearLogFile()
 {
-    if (this->fileOutputStream.is_open())
+    if (this->m_fileOutputStream.is_open())
     {
-        this->fileOutputStream.close();
-        this->fileOutputStream.open(this->pathLogFile);
+        this->m_fileOutputStream.close();
+        this->m_fileOutputStream.open(this->m_pathLogFile, std::ios::out);
     }
 }
 
+
 /* -----------------------------------------------------------------------------
  * Special LogChannels Definitions (Children)
- * ----------------------------------------------------------------------------*/
+ * ---------------------------------------------------------------------------*/
 
 void LogChannelVS::writeInChannel(std::string const& message) const
 {

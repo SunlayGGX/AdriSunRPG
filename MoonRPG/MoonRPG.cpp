@@ -4,7 +4,7 @@
 #include "AutoEngineInstaller.h"
 
 #include "GlobalEngine.h"
-#include "LoggerManager.h"
+#include "ElephantLogger.h"
 
 
 int main() try
@@ -13,19 +13,12 @@ int main() try
 
     MoonRPG::GlobalEngine::instance().run();
 
-    LOG_VS_ERROR("LOG TEST ERROR");
-    LOG_VS_WARNING("LOG TEST WARNIGN");
-    LOG_VS_CONFIG("LOG TEST CONFIG");
-    LOG_VS_INFO("LOG TEST INFO");
-    LOG_VS_TRACE("LOG TEST TRACE");
-    LOG_VS_DEBUG("LOG TEST DEBUG");
-
     return 0;
 }
 catch(const std::exception& exception)
 {
     //TODO Add path for save file
-    MoonRPG::LoggerManager::instance().saveFileToSafeDirectory("");
+    MoonRPG::LoggerManager::instance().saveAllLogFiles();
 
     ::MessageBoxA(NULL, exception.what(), "Error", MB_ICONERROR);
     return -99;
@@ -33,7 +26,7 @@ catch(const std::exception& exception)
 catch(...)
 {
     //TODO Add path for save file
-    MoonRPG::LoggerManager::instance().saveFileToSafeDirectory("");
+    MoonRPG::LoggerManager::instance().saveAllLogFiles();
 
     ::MessageBoxA(NULL, "Unidentified error", "Error", MB_ICONERROR);
     return -100;

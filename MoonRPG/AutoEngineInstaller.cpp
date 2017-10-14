@@ -1,7 +1,7 @@
 #include "AutoEngineInstaller.h"
 
 #include "GlobalEngine.h"
-#include "LoggerManager.h"
+#include "ElephantLogger.h"
 
 using namespace MoonRPG;
 

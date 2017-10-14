@@ -28,7 +28,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LogChannel.h" />
+    <ClInclude Include="LoggerConfig.h" />
     <ClInclude Include="LoggerManager.h" />
+    <ClInclude Include="LogLevel.h" />
+    <ClInclude Include="LogMessage.h" />
+    <ClInclude Include="ElephantLogger.h" />
     <ClInclude Include="MoonRPGElephantLoggerPch.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -107,7 +112,8 @@
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(MOONRPG_DEVEL)/MoonRPGHelper/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>MoonRPGElephantLoggerPch.h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>MoonRPGElephantLoggerPch.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

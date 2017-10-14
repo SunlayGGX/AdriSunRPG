@@ -1,7 +1,7 @@
 #include "GlobalEngine.h"
 
 #include "RenderEngine.h"
-#include "LoggerManager.h"
+#include "ElephantLogger.h"
 #include "GameConfig.h"
 
 using namespace MoonRPG;
@@ -36,7 +36,6 @@ void GlobalEngine::run()
     while(m_run)
     {
         /*TODO : Update the Game Loop*/
-
         RenderEngine::instance().update();
 
         //Bad, but until we have a proper TimeManager, this will do the job...
