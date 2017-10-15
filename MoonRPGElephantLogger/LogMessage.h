@@ -1,6 +1,6 @@
 #pragma once
 
-#include"LogLevel.h"
+#include "LogLevel.h"
 #include "LogChannel.h"
 
 namespace MoonRPG

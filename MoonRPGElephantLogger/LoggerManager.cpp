@@ -36,28 +36,35 @@ void LoggerManager::initialize()
     this->m_logFilePath         = LOGGER_SETTINGS_DEFAULT_LOGPATH;
     this->m_logFileSavePath     = LOGGER_SETTINGS_DEFAULT_LOGPATH_SAVE;
 
+    using Clock = std::chrono::system_clock;
+    std::time_t startTime = Clock::to_time_t(Clock::now());
+    char timestamp[30] = "";
+    std::strftime(timestamp, 30, "%Y%m%d_%H%M%S_MoonLogs/", std::localtime(&startTime));
+    this->m_logFileSavePath += timestamp; // Add unique time value log folder
+
+
     // Register all available log channles. (To add a new, place it here)
     this->m_lookupChannels[LogChannel::Vs]      = std::unique_ptr<LogChannelVS>(new LogChannelVS());
     this->m_lookupChannels[LogChannel::Cout]    = std::unique_ptr<LogChannelCout>(new LogChannelCout());
 
     if (this->m_isLogingInFile)
     {
+        // Warning: Erase before linkWithFile() otherwise, files stream are opened.
+        if (LOGGER_SETTINGS_DEFAULT_ERASE_FILE_AT_START)
+        {
+            if (std::experimental::filesystem::exists(this->m_logFilePath))
+            {
+                std::experimental::filesystem::remove_all(m_logFilePath);
+            }
+        }
+        
+        std::experimental::filesystem::create_directory(this->m_logFilePath);
+
         std::string vsLogPath   = this->m_logFilePath + "/vs.log";
         std::string coutLogPath = this->m_logFilePath + "/cout.log";
 
         this->m_lookupChannels[LogChannel::Vs]->linkWithFile(vsLogPath);
         this->m_lookupChannels[LogChannel::Cout]->linkWithFile(coutLogPath);
-
-        if (LOGGER_SETTINGS_DEFAULT_ERASE_FILE_AT_START)
-        {
-            if (std::experimental::filesystem::exists(this->m_logFilePath))
-            {
-                // TODO (Not working atm)
-                //std::experimental::filesystem::remove_all(m_logFilePath);
-            }
-
-            std::experimental::filesystem::create_directory(this->m_logFilePath);
-        }
     }
 
     this->internalStartLoggerThread();
@@ -91,8 +98,8 @@ void LoggerManager::queueLog(LogLevel level, LogChannel::Output output,
 
 void LoggerManager::saveAllLogFiles() const
 {
-    // TODO (Not working yet)
-    //std::experimental::filesystem::copy(this->m_logFilePath, this->m_logFileSavePath);
+    // TODO Doesn't work for now
+    std::experimental::filesystem::copy(this->m_logFilePath, this->m_logFileSavePath);
 }
 
 

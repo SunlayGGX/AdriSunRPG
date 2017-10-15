@@ -30,7 +30,7 @@ void LogChannel::writeInFile(std::string const& message)
     }
 }
 
-void LogChannel::linkWithFile(std::string const& filePath)
+bool LogChannel::linkWithFile(std::string const& filePath)
 {
     if (this->m_fileOutputStream.is_open())
     {
@@ -38,6 +38,8 @@ void LogChannel::linkWithFile(std::string const& filePath)
     }
     this->m_pathLogFile = filePath;
     this->m_fileOutputStream.open(filePath, std::ios::out | std::ios::app);
+
+    return this->m_fileOutputStream.is_open();
 }
 
 void LogChannel::unlinkFile()
@@ -46,15 +48,6 @@ void LogChannel::unlinkFile()
     {
         this->m_fileOutputStream.close();
         this->m_pathLogFile.clear();
-    }
-}
-
-void LogChannel::clearLogFile()
-{
-    if (this->m_fileOutputStream.is_open())
-    {
-        this->m_fileOutputStream.close();
-        this->m_fileOutputStream.open(this->m_pathLogFile, std::ios::out);
     }
 }
 
