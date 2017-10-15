@@ -17,7 +17,6 @@ int main() try
 }
 catch(const std::exception& exception)
 {
-    //TODO Add path for save file
     MoonRPG::LoggerManager::instance().saveAllLogFiles();
 
     ::MessageBoxA(NULL, exception.what(), "Error", MB_ICONERROR);
@@ -25,7 +24,6 @@ catch(const std::exception& exception)
 }
 catch(...)
 {
-    //TODO Add path for save file
     MoonRPG::LoggerManager::instance().saveAllLogFiles();
 
     ::MessageBoxA(NULL, "Unidentified error", "Error", MB_ICONERROR);
