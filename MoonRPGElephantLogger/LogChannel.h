@@ -86,34 +86,19 @@ namespace MoonRPG
             void writeInFile(std::string const& message);
 
             /**
-             * Link this LogChannel with the given file.
-             * Enable all operations on this LogChannel's file.
-             * If already linked with a file, change it with this new file.
+             * Links this LogChannel with the given file.
+             * A stream is opened on this file path (append mode).
+             * The path part must exists, otherwise, link fails.
              *
-             * \warning
-             * If given file doesn't exists, it will be created.
-             *
-             * \remark
-             * Use append mode.
+             * \return True if successuflly linked, otherwise, return false.
              */
-            void linkWithFile(std::string const& filePath);
+            bool linkWithFile(std::string const& filePath);
 
             /**
-             * Remove the link file.
+             * Remove the link with a file and close the file stream.
              * Disable all operations on this LogChannel's file.
              */
             void unlinkFile();
-
-            /**
-             * Clear the content of the file linked with this channel.
-             *
-             * \remark
-             * Do nothing if no file linked.
-             *
-             * \warning
-             * This erase the whole content of the linked file.
-             */
-            void clearLogFile();
     };
 
 

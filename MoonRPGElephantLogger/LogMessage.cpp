@@ -44,14 +44,17 @@ const std::string LogMessage::getFormattedMessage() const
         "[Unknown LogLevel]: "
     };
 
-    std::string temp = "[" + dateStr +"] ";
+    std::string logDate = "[" + dateStr +"] ";
 
     if (this->m_logLevel == LogLevel::Debug)
     {
-        temp += "[" + this->m_filePosition + ": " + std::to_string(this->m_linePosition) + "] ";
+        return logDate
+            + formatLU[static_cast<size_t>(this->m_logLevel)] 
+            + "[" + this->m_filePosition + ": " + std::to_string(this->m_linePosition) + "] "
+            + this->m_message;
     }
 
-    return temp + formatLU[static_cast<size_t>(this->m_logLevel)] + this->m_message;
+    return logDate + formatLU[static_cast<size_t>(this->m_logLevel)] + this->m_message;
 }
 
 const LogChannel::Output LogMessage::getLogChannel() const
