@@ -38,9 +38,13 @@
 
 
 /*MoonRPG*/
+#include "MoonRPGElephantLoggerPch.h"
+
 #ifdef _DEBUG
 #   pragma comment(lib, "MoonRPGHelper_d.lib")
+#   pragma comment(lib, "MoonRPGElephantLogger_d.lib")
 #else
 #   pragma comment(lib, "MoonRPGHelper.lib")
+#   pragma comment(lib, "MoonRPGElephantLogger.lib")
 #endif
 
