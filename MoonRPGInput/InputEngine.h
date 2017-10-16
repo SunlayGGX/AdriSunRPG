@@ -2,6 +2,9 @@
 
 #include "MoonSingleton.h"
 
+#include "KeyboardElement.h"
+#include "Gamepad.h"
+
 namespace MoonRPG
 {
     class InputEngine : public MoonRPG::MoonSingleton<InputEngine>
@@ -22,5 +25,12 @@ namespace MoonRPG
         void update();
 
         void createKeyboard(HWND windowsInstance);
+
+        KeyboardElement getCurrentKeyboardState() const;
+        KeyboardElement getKeyboardChangedState() const;
+        KeyboardElement getKeyboardUpState() const;
+        KeyboardElement getKeyboardDownState() const;
+
+        Gamepad getFirstGamepadState() const;
     };
 }

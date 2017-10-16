@@ -58,7 +58,7 @@
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>MoonRPGInputPch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>MoonRPGInputPch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(MOONRPG_DEVEL)/MoonRPGHelper/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MOONRPG_DEVEL)/MoonRPGHelper/;$(MOONRPG_DEVEL)/MoonRPGElephantLogger/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -78,7 +78,7 @@
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>MoonRPGInputPch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>MoonRPGInputPch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(MOONRPG_DEVEL)/MoonRPGHelper/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MOONRPG_DEVEL)/MoonRPGHelper/;$(MOONRPG_DEVEL)/MoonRPGElephantLogger/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

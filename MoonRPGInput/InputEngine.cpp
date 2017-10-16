@@ -3,6 +3,8 @@
 #include "GamepadController.h"
 #include "KeyboardController.h"
 
+#include "ElephantLogger.h"
+
 using namespace MoonRPG;
 
 InputEngine::InputEngine() :
@@ -30,7 +32,7 @@ void InputEngine::update()
 {
     if(!m_gamepadController->update())
     {
-        //TODO: Log
+        LOG_ERROR("No Gamepad connected");
     }
 
     m_keyboardController->update();
@@ -39,4 +41,29 @@ void InputEngine::update()
 void InputEngine::createKeyboard(HWND windowsInstance)
 {
     m_keyboardController->createKeyboard(windowsInstance);
+}
+
+KeyboardElement InputEngine::getCurrentKeyboardState() const
+{
+    return m_keyboardController->getCurrentKeyboardState();
+}
+
+KeyboardElement InputEngine::getKeyboardChangedState() const
+{
+    return m_keyboardController->getKeyboardChangedState();
+}
+
+KeyboardElement InputEngine::getKeyboardUpState() const
+{
+    return m_keyboardController->getKeyboardUpState();
+}
+
+KeyboardElement InputEngine::getKeyboardDownState() const
+{
+    return m_keyboardController->getKeyboardDownState();
+}
+
+Gamepad InputEngine::getFirstGamepadState() const
+{
+    return m_gamepadController->getFirstGamepad();
 }
