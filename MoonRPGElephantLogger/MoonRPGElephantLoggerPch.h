@@ -6,7 +6,6 @@
 #undef WIN32_LEAN_AND_MEAN
 
 #include <fstream>
-#include <unordered_map>
 #include <mutex>
 #include <atomic>
 #include <string>

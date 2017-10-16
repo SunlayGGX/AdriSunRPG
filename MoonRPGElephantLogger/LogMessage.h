@@ -3,6 +3,8 @@
 #include "LogLevel.h"
 #include "LogChannel.h"
 
+#include <ctime>
+
 namespace MoonRPG
 {
 
@@ -20,9 +22,9 @@ namespace MoonRPG
             LogChannel::Output		m_channel;
             std::string		        m_message;
 
-            std::string             m_filePosition;
+            const std::string       m_filePosition;
             const int               m_linePosition;
-            const time_t            m_creationTime;
+            const std::time_t       m_creationTime;
 
 
         public:
