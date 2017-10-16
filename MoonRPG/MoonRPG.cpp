@@ -4,6 +4,7 @@
 #include "AutoEngineInstaller.h"
 
 #include "GlobalEngine.h"
+#include "ElephantLogger.h"
 
 
 int main() try
@@ -16,13 +17,15 @@ int main() try
 }
 catch(const std::exception& exception)
 {
-    //TODO : LOG the error exception.what() and dump the application state.
-    ::MessageBoxA(NULL, exception.what(), "Erreur", MB_ICONERROR);
+    MoonRPG::LoggerManager::instance().saveAllLogFiles();
+
+    ::MessageBoxA(NULL, exception.what(), "Error", MB_ICONERROR);
     return -99;
 }
 catch(...)
 {
-    //TODO : LOG there was an error and dump the application state.
-    ::MessageBoxA(NULL, "Unidentified error", "Erreur", MB_ICONERROR);
+    MoonRPG::LoggerManager::instance().saveAllLogFiles();
+
+    ::MessageBoxA(NULL, "Unidentified error", "Error", MB_ICONERROR);
     return -100;
 }
