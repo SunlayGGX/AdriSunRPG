@@ -99,6 +99,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="SingletonGlobalAllocator.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TimeManager.h" />
     <ClInclude Include="WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +116,7 @@
     <ClCompile Include="GlobalEngine.cpp" />
     <ClCompile Include="RenderEngine.cpp" />
     <ClCompile Include="SingletonGlobalAllocator.cpp" />
+    <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
