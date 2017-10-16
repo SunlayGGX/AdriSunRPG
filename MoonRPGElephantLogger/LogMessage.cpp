@@ -6,8 +6,6 @@
 
 #include "LogMessage.h"
 
-#include <ctime>
-
 using namespace MoonRPG;
 
 
@@ -21,16 +19,12 @@ LogMessage::LogMessage(const LogLevel logLevel,
       m_message(std::move(message)),
       m_filePosition(std::move(file)),
       m_linePosition(line),
-      m_creationTime(std::time(0))
+      m_creationTime(std::time(nullptr))
 {}
 
 const std::string LogMessage::getFormattedMessage() const
 {
-    using Clock = std::chrono::system_clock;
-
-    std::chrono::time_point<Clock> now = Clock::now();
-    time_t t = Clock::to_time_t(now);
-    std::string dateStr = ctime(&t);
+    std::string dateStr = ctime(&this->m_creationTime);
     dateStr.pop_back(); // Remove line return
 
     static const std::string formatLU[] =

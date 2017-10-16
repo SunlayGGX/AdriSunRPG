@@ -31,10 +31,10 @@ void LoggerManager::initialize()
     this->m_isRunning           = true;
     this->m_queueLogsFront      = &m_queueLogs1;
     this->m_queueLogsBack       = &m_queueLogs2;
-    this->m_currentLogLevel     = static_cast<int8_t>(LOGGER_SETTINGS_DEFAULT_LOG_LEVEL);
     this->m_isLogingInFile      = LOGGER_SETTINGS_DEFAULT_LOG_IN_FILE;
     this->m_logFilePath         = LOGGER_SETTINGS_DEFAULT_LOGPATH;
     this->m_logFileSavePath     = LOGGER_SETTINGS_DEFAULT_LOGPATH_SAVE;
+    this->setLogLevel(LOGGER_SETTINGS_DEFAULT_LOG_LEVEL);
 
     // Register all available log channles. (To add a new, place it here)
     this->m_lookupChannels[LogChannel::Vs]      = std::unique_ptr<LogChannelVS>(new LogChannelVS());
@@ -59,8 +59,6 @@ void LoggerManager::initialize()
 
         this->m_lookupChannels[LogChannel::Vs]->linkWithFile(vsLogPath);
         this->m_lookupChannels[LogChannel::Cout]->linkWithFile(coutLogPath);
-
-
     }
 
     this->internalStartLoggerThread();
@@ -86,21 +84,34 @@ void LoggerManager::queueLog(LogLevel level, LogChannel::Output output,
                              char const* file,
                              int line)
 {
-    if (this->m_isRunning && this->m_currentLogLevel.load() >= static_cast<int8_t>(level))
+    if (this->m_isRunning && this->getLogLevel() >= level)
     {
         this->internalQueueLog(level, output, message, file, line);
     }
 }
 
-void LoggerManager::saveAllLogFiles() const
+bool LoggerManager::saveAllLogFiles() const
 {
-    using Clock = std::chrono::system_clock;
-    std::time_t startTime = Clock::to_time_t(Clock::now());
-    char timestamp[30];
-    std::strftime(timestamp, 30, "/%Y_%m_%d_%H%M%S_MoonSavedLogs/", std::localtime(&startTime));
-    auto saveFolder = std::experimental::filesystem::path(this->m_logFileSavePath + timestamp);
-    std::experimental::filesystem::create_directory(saveFolder);
-    std::experimental::filesystem::copy(this->m_logFilePath, saveFolder);
+    if (this->m_isLogingInFile) {
+        using Clock = std::chrono::system_clock;
+        std::time_t startTime = Clock::to_time_t(Clock::now());
+        char timestamp[30];
+        std::strftime(timestamp, 30, "/%Y_%m_%d_%H%M%S_MoonSavedLogs/", std::localtime(&startTime));
+        
+        try{
+            auto saveFolder = std::experimental::filesystem::path(this->m_logFileSavePath + timestamp);
+            bool res = std::experimental::filesystem::create_directory(saveFolder);
+            if (res == true) {
+                std::experimental::filesystem::copy(this->m_logFilePath, saveFolder);
+            }
+            return res;
+        }
+        catch (const std::experimental::filesystem::filesystem_error& e)
+        {
+            return false;
+        }
+    }
+    return false;
 }
 
 

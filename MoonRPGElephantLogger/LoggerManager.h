@@ -5,6 +5,8 @@
 #include "LogMessage.h"
 #include "LogLevel.h"
 
+#include <vector>
+
 
 namespace MoonRPG
 {
@@ -107,8 +109,11 @@ namespace MoonRPG
             /**
              * Save all current log files in the save directory set.
              * This process a simple copy of current log file path to save path.
+             * Do nothing if log in file is not allowed (False returned).
+             *
+             * \return True if successfully saved, otherwise, return false.
              */
-            void saveAllLogFiles() const;
+            bool saveAllLogFiles() const;
 
 
         private:
