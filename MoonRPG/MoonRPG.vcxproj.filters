@@ -48,6 +48,9 @@
     <ClInclude Include="MoonRPGPch.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SingletonGlobalAllocator.cpp">
@@ -75,6 +78,9 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="MoonRPGPch.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
