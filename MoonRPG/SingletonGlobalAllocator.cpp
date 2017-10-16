@@ -4,11 +4,13 @@
 #include "TimeManager.h"
 #include "WindowManager.h"
 #include "RenderEngine.h"
+#include "LoggerManager.h"
 
 
 namespace MoonRPG
 {
     using SingletonAllocatorAlias = MoonSingletonGlobalAllocator<
+        LoggerManager,
         GlobalEngine,
         TimeManager,
         WindowManager,
