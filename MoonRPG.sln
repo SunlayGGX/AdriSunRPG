@@ -5,21 +5,15 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MoonRPG", "MoonRPG\MoonRPG.vcxproj", "{40D26E60-E0EB-4F3F-8988-9BD651CEF6D6}"
 	ProjectSection(ProjectDependencies) = postProject
-<<<<<<< HEAD
 		{1056B078-8837-46DB-9C9C-3B9C44BB9177} = {1056B078-8837-46DB-9C9C-3B9C44BB9177}
-=======
 		{9E5C5E65-77A3-4D2E-8BA9-FAC808713010} = {9E5C5E65-77A3-4D2E-8BA9-FAC808713010}
->>>>>>> Develop-Sprint2
 		{F77A12E6-EC61-4A8F-A7B8-744C29DD0B30} = {F77A12E6-EC61-4A8F-A7B8-744C29DD0B30}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MoonRPGHelper", "MoonRPGHelper\MoonRPGHelper.vcxproj", "{F77A12E6-EC61-4A8F-A7B8-744C29DD0B30}"
 EndProject
-<<<<<<< HEAD
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MoonRPGInput", "MoonRPGInput\MoonRPGInput.vcxproj", "{1056B078-8837-46DB-9C9C-3B9C44BB9177}"
-=======
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MoonRPGElephantLogger", "MoonRPGElephantLogger\MoonRPGElephantLogger.vcxproj", "{9E5C5E65-77A3-4D2E-8BA9-FAC808713010}"
->>>>>>> Develop-Sprint2
 	ProjectSection(ProjectDependencies) = postProject
 		{F77A12E6-EC61-4A8F-A7B8-744C29DD0B30} = {F77A12E6-EC61-4A8F-A7B8-744C29DD0B30}
 	EndProjectSection
@@ -38,17 +32,14 @@ Global
 		{F77A12E6-EC61-4A8F-A7B8-744C29DD0B30}.Debug|x64.Build.0 = Debug|x64
 		{F77A12E6-EC61-4A8F-A7B8-744C29DD0B30}.Release|x64.ActiveCfg = Release|x64
 		{F77A12E6-EC61-4A8F-A7B8-744C29DD0B30}.Release|x64.Build.0 = Release|x64
-<<<<<<< HEAD
 		{1056B078-8837-46DB-9C9C-3B9C44BB9177}.Debug|x64.ActiveCfg = Debug|x64
 		{1056B078-8837-46DB-9C9C-3B9C44BB9177}.Debug|x64.Build.0 = Debug|x64
 		{1056B078-8837-46DB-9C9C-3B9C44BB9177}.Release|x64.ActiveCfg = Release|x64
 		{1056B078-8837-46DB-9C9C-3B9C44BB9177}.Release|x64.Build.0 = Release|x64
-=======
 		{9E5C5E65-77A3-4D2E-8BA9-FAC808713010}.Debug|x64.ActiveCfg = Debug|x64
 		{9E5C5E65-77A3-4D2E-8BA9-FAC808713010}.Debug|x64.Build.0 = Debug|x64
 		{9E5C5E65-77A3-4D2E-8BA9-FAC808713010}.Release|x64.ActiveCfg = Release|x64
 		{9E5C5E65-77A3-4D2E-8BA9-FAC808713010}.Release|x64.Build.0 = Release|x64
->>>>>>> Develop-Sprint2
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
