@@ -22,6 +22,12 @@ namespace MoonRPG
         void run();
 
         void quit();
+
+        bool isFullyInitialized() const;
+
+
+    private:
+        void startInputAndWindowsThread() const;
     };
 }
 

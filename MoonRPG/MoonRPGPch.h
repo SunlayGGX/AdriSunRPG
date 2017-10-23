@@ -17,6 +17,7 @@
 
 #include "MoonRPGHelperPch.h"
 #include "MoonRPGElephantLoggerPch.h"
+#include "MoonRPGInputPch.h"
 #include "targetver.h"
 
 
@@ -43,14 +44,13 @@
 
 /*Lib include*/
 
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "dxgi.lib")
-
 #ifdef _DEBUG
 #   pragma comment(lib, "MoonRPGHelper_d.lib")
+#   pragma comment(lib, "MoonRPGInput_d.lib")
 #   pragma comment(lib, "MoonRPGElephantLogger_d.lib")
 #else
 #   pragma comment(lib, "MoonRPGHelper.lib")
+#   pragma comment(lib, "MoonRPGInput.lib")
 #   pragma comment(lib, "MoonRPGElephantLogger.lib")
 #endif
 

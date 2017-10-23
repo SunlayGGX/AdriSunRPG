@@ -14,11 +14,7 @@ namespace MoonRPG
 
 
     private:
-        mutable std::mutex m_mutex;
-        mutable std::condition_variable m_synchronizer;
-
-        HWND m_windowsHandleInstance;
-
+        bool m_initialized;
         DirectXGlobalDevice m_globalDevice;
 
 
@@ -29,7 +25,8 @@ namespace MoonRPG
         void update();
 
         void setWindowsHandleInstance(HWND windowInstance);
-        HWND getWindowInstance() const;
+
+        bool isInitialized() const;
 
 
     public:

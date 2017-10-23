@@ -4,6 +4,7 @@
 #include "TimeManager.h"
 #include "WindowManager.h"
 #include "RenderEngine.h"
+#include "InputEngine.h"
 #include "LoggerManager.h"
 
 
@@ -14,7 +15,8 @@ namespace MoonRPG
         GlobalEngine,
         TimeManager,
         WindowManager,
-        RenderEngine
+        RenderEngine,
+        InputEngine
     >;
 }
 
