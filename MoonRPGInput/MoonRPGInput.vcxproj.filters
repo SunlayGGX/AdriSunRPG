@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Keyboard">
+      <UniqueIdentifier>{c368a8a1-ec97-4242-abe6-eaf51d508c98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Keyboard">
+      <UniqueIdentifier>{c9f32a1f-3d3a-4719-b3cc-28abb919c31b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Gamepad">
+      <UniqueIdentifier>{4987f4c9-3f4f-4c4d-b976-ec2794dc83ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Gamepad">
+      <UniqueIdentifier>{de5a3344-7e7c-4d86-b7ba-a8403d4533f3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="MoonRPGInputPch.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="InputEngine.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>Fichiers d%27en-tête\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Gamepad.h">
+      <Filter>Fichiers d%27en-tête\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardController.h">
+      <Filter>Fichiers d%27en-tête\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="GamepadController.h">
+      <Filter>Fichiers d%27en-tête\Gamepad</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardElement.h">
+      <Filter>Fichiers d%27en-tête\Keyboard</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MoonRPGInputPch.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="InputEngine.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>Fichiers sources\Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardController.cpp">
+      <Filter>Fichiers sources\Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="Gamepad.cpp">
+      <Filter>Fichiers sources\Gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="GamepadController.cpp">
+      <Filter>Fichiers sources\Gamepad</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
